@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de la Propuesta y Ahorcado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            transition: background-color 2s ease;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #game {
+            padding: 20px;
+        }
+
+        .level {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        #question {
+            font-size: 24px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            transition: color 2s ease;
+        }
+
+        #hangman {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #guessInput {
+            margin-top: 20px;
+            padding: 5px 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+        }
+
+        .modal-content input[type="text"] {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .modal-content button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal-content button:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Juego de la Propuesta y Ahorcado</h1>
+        <div id="game">
+            <p class="level">Nivel <span id="level">1</span></p>
+            <div id="question">
+                <!-- Aquí se irá mostrando la frase con letras ocultas -->
+            </div>
+            <div id="hangman">
+                <!-- Aquí se irá mostrando el ahorcado -->
+            </div>
+            <form id="guessForm">
+                <input type="text" id="guessInput" placeholder="Adivina una letra" autocomplete="off">
+                <button id="guessBtn" type="submit">Adivinar</button>
+            </form>
+            <button id="nextBtn" style="display: none;">Siguiente</button>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span onclick="document.getElementById('myModal').style.display = 'none'" style="float:right; cursor:pointer;">&times;</span>
+            <p>¡Felicidades! Has adivinado la frase.</p>
+            <p>¿Quieres ser mi novia?</p>
+            <input type="text" id="answerInput" placeholder="Sí / No">
+            <button id="answerBtn">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        const phrase = "Quieres ser mi novia";
+
+        const hangmanPhases = [
+            ["______"],
+            [" |    |"],
+            [" |    O"],
+            [" |   /", "|", "\\"],
+            [" |    |"],
+            [" |   /", " \\"],
+            ["_|_"]
+        ];
+
+        let hiddenPhrase = phrase.replace(/[a-z]/gi, "_");
+        let remainingLetters = phrase.length;
+        let currentHangmanPhase = 0;
+
+        function displayQuestion() {
+            document.getElementById('question').textContent = hiddenPhrase;
+        }
+
+        function displayHangman() {
+            const hangmanDiv = document.getElementById('hangman');
+            hangmanDiv.innerHTML = hangmanPhases.slice(0, currentHangmanPhase + 1).join('<br>');
+        }
+
+        function checkGuess(guess) {
+            let found = false;
+            for (let i = 0; i < phrase.length; i++) {
+                if (phrase[i].toLowerCase() === guess.toLowerCase()) {
+                    hiddenPhrase = hiddenPhrase.substring(0, i) + phrase[i] + hiddenPhrase.substring(i + 1);
+                    found = true;
+                    remainingLetters--;
+                }
+            }
+            if (!found) {
+                currentHangmanPhase++;
+                displayHangman();
+                if (currentHangmanPhase === hangmanPhases.length - 1) {
+                    alert("¡Perdiste! El ahorcado está completo.");
+                    resetGame();
+                }
+            } else {
+                displayQuestion();
+                if (hiddenPhrase === phrase) {
+                    document.getElementById('myModal').style.display = "block";
+                }
+            }
+        }
+
+        function resetBackground() {
+            document.body.style.backgroundColor = '#f4f4f4';
+            document.getElementById('question').style.color = '#000';
+        }
+
+        document.getElementById('guessForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const guess = document.getElementById('guessInput').value.trim();
+            if (guess.length === 1 && guess.match(/[a-z]/i)) {
+                checkGuess(guess);
+                document.getElementById('guessInput').value = '';
+            } else {
+                alert("Por favor, ingresa una sola letra válida.");
+            }
+        });
+
+        document.getElementById('answerBtn').addEventListener('click', function() {
+            const answer = document.getElementById('answerInput').value.trim().toLowerCase();
+            if (answer === "si") {
+                window.location.href = 'fuegos_artificiales.html';
+            } else if (answer === "no") {
+                alert("Lo siento, sigue intentándolo.");
+                document.getElementById('myModal').style.display = "none";
+            } else {
+                alert("Por favor, responde 'Sí' o 'No'.");
+            }
+        });
+
+        function resetGame() {
+            hiddenPhrase = phrase.replace(/[a-z]/gi, "_");
+            remainingLetters = phrase.length;
+            currentHangmanPhase = 0;
+            document.getElementById('level').textContent = 1;
+            document.getElementById('guessInput').value = '';
+            displayQuestion();
+            displayHangman();
+            resetBackground();
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('myModal')) {
+                document.getElementById('myModal').style.display = "none";
+            }
+        };
+
+   
+
+        displayQuestion();
+        displayHangman();
+    </script>
+</body>
+</html>

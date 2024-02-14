@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuegos Artificiales con Sailor Moon</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Evitar barras de desplazamiento */
+            background-color: #007bff; /* Fondo azul */
+            color: #fff; /* Texto blanco */
+            font-family: Arial, sans-serif; /* Fuente del texto */
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centrar horizontalmente */
+            justify-content: center; /* Centrar verticalmente */
+            height: 100vh; /* Tamaño completo de la ventana */
+        }
+
+        #content {
+            text-align: center;
+            margin: 20px; /* Espacio alrededor del texto */
+        }
+
+        #imagesContainer {
+            display: flex;
+            justify-content: center; /* Centrar horizontalmente */
+            margin-top: 20px; /* Espacio arriba de las imágenes */
+        }
+
+        #sailorMoonLeft,
+        #sailorMoonRight {
+            height: 600px; /* Altura fija para las imágenes */
+            margin: 0 10px; /* Espacio entre las imágenes */
+        }
+
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: #ff0; /* Color de los fuegos artificiales */
+            border-radius: 50%;
+            animation: fireworks 1s linear infinite; /* Animación de los fuegos artificiales */
+        }
+
+        @keyframes fireworks {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-1000px) rotate(1080deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="content">
+            <h1 style="font-size: 36px;">¡Felicidades!</h1>
+            <p style="font-size: 28px;">Ya te amolaste, te espera una vida de felicidad.</p>
+        </div>
+
+        <div id="imagesContainer">
+            <img id="sailorMoonLeft" src="sailor.png" alt="Sailor Moon en la izquierda">
+            <img id="sailorMoonRight" src="moon.png" alt="Sailor Moon en la derecha">
+        </div>
+    </div>
+
+    <div id="fireworksContainer">
+        <!-- Contenedor para los fuegos artificiales -->
+    </div>
+
+    <script>
+        window.onload = function() {
+            displayFireworks();
+        };
+
+        function displayFireworks() {
+            const fireworksContainer = document.getElementById('fireworksContainer');
+            
+            for (let i = 0; i < 30; i++) {
+                const firework = document.createElement('div');
+                firework.classList.add('firework');
+                fireworksContainer.appendChild(firework);
+                
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                const size = Math.random() * 3;
+                
+                firework.style.left = x + 'px';
+                firework.style.top = y + 'px';
+                firework.style.width = 2 + size + 'px';
+                firework.style.height = 2 + size + 'px';
+                firework.style.animationDuration = Math.random() * 2 + 1 + 's';
+            }
+            
+            setTimeout(function() {
+                fireworksContainer.innerHTML = ''; // Limpiar fuegos artificiales después de un tiempo
+            }, 5000); // Cambiar a la duración deseada de los fuegos artificiales
+        }
+    </script>
+</body>
+</html>
