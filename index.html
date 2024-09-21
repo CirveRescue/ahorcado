@@ -8,51 +8,82 @@
         body {
             margin: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
         }
 
         .contenedor {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             animation: balanceo 3s ease-in-out infinite;
         }
 
         .flor {
             position: relative;
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             background-color: yellow;
             border-radius: 50%;
         }
 
         .petalo {
             position: absolute;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 100px;
             background-color: yellow;
-            border-radius: 50%;
+            border-radius: 50px 50px 0 0;
+            transform-origin: bottom center;
         }
 
-        .petalo1 { top: -25px; left: 25px; }
-        .petalo2 { bottom: -25px; left: 25px; }
-        .petalo3 { left: -25px; top: 25px; }
-        .petalo4 { right: -25px; top: 25px; }
+        .petalo1 { transform: rotate(0deg); }
+        .petalo2 { transform: rotate(45deg); }
+        .petalo3 { transform: rotate(90deg); }
+        .petalo4 { transform: rotate(135deg); }
+        .petalo5 { transform: rotate(180deg); }
+        .petalo6 { transform: rotate(225deg); }
+        .petalo7 { transform: rotate(270deg); }
+        .petalo8 { transform: rotate(315deg); }
 
         .centro {
             position: absolute;
-            width: 30px;
-            height: 30px;
+            width: 60px;
+            height: 60px;
             background-color: orange;
             border-radius: 50%;
-            top: 35px;
-            left: 35px;
+            top: 30px;
+            left: 30px;
+        }
+
+        .tallo {
+            width: 10px;
+            height: 150px;
+            background-color: green;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .mensaje {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+            text-align: center;
+            animation: fadein 5s infinite;
         }
 
         @keyframes balanceo {
             0% { transform: rotate(0deg); }
-            50% { transform: rotate(10deg); }
+            50% { transform: rotate(5deg); }
             100% { transform: rotate(0deg); }
+        }
+
+        @keyframes fadein {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
@@ -63,8 +94,17 @@
             <div class="petalo petalo2"></div>
             <div class="petalo petalo3"></div>
             <div class="petalo petalo4"></div>
+            <div class="petalo petalo5"></div>
+            <div class="petalo petalo6"></div>
+            <div class="petalo petalo7"></div>
+            <div class="petalo petalo8"></div>
             <div class="centro"></div>
         </div>
+        <div class="tallo"></div>
+    </div>
+
+    <div class="mensaje">
+        Gracias por ser especial para mí, Mariana
     </div>
 </body>
 </html>
